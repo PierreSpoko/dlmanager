@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>dl-manager</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+        <link href="style.css" rel="stylesheet" />
+        
+</head>
+<body class="text-center">
+        <div class="container-fluid d-flex h-100 p-6 mx-auto flex-column" id="app">
+            <template v-for="notification in notifications">
+                <transition name="fade">
+                    <div class="alert mt-1" v-bind:class="'alert-' + notification.type" role="alert">
+                        {{notification.message}}
+                    </div>
+                </transition>
+            </template>
+            <main role="main" class="inner cover">
+                <h2 class="cover-heading">Colle ici le lien d'extreme down</h2>
+                <form
+                id="form_app"
+                @submit.prevent="checkForm"
+                >
+                    <div class="form-group">
+                    <input type="text" class="form-control" id="inputlink" placeholder="https://ed-protect.org/xxXXxx" v-model="input_url">
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary" :disabled="input_url == ''">Download</button>
+                </form>
+                <br/>
+            <template v-for="file in files">
+                <transition name="fade-leave">
+                    <div class="card mt-1" v-bind:class="'bg-' + file.css" :key="file.name">
+                        <div class="card-header">
+                        {{ file.name + ' - (' + file.download + '/' + file.size + ')'}}
+                        <div class="progress mt-1" style="height: 20px;">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" v-bind:class="'bg-' + file.css" role="progressbar" v-bind:style="{width: file.progress + '%', color: 'black'}">{{ file.progress + '% - ' + file.speed + '/s' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </template>
+            </main>
+        </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script src="app.js"></script>
+</html>
